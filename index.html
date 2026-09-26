@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#020a1c">
+<title>ANGEL FISH ─ Covered by ときの嶋｜Unofficial Fan Site</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;600&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
+<style>
+:root{
+  --bg:#020a1c;--text:#e8f1ff;--muted:#8ea8d4;--dim:#5c77a6;
+  --yellow:#ffe03c;--cyan:#7fdcff;--blue:#4d8dff;
+  --glass:rgba(10,28,64,.42);--line:rgba(160,200,255,.18);
+  --brown:#5b3a32;--brown2:#8a5e4f;
+  --serif:'Instrument Serif','Times New Roman',serif;
+  --sans:'Outfit','Zen Kaku Gothic New',system-ui,sans-serif;
+  --jp:'Zen Kaku Gothic New','Hiragino Sans','Noto Sans JP',sans-serif;
+  --pix:'DotGothic16','Osaka-Mono','MS Gothic',monospace;
+  --abyss:0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg)}
+body{font-family:var(--sans);color:var(--text);line-height:1.8;background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+::selection{background:var(--yellow);color:#06142e}
+
+/* ============ AQUARIUM BACKGROUND ============ */
+.ocean,.rays,.grain,.abyss,#far,#mid{position:fixed;left:0;top:0;width:100vw;height:100vh;height:100lvh;pointer-events:none}
+.ocean{z-index:0;background:
+  radial-gradient(120% 70% at 50% -12%,#2a74d0 0%,#0e3a7c 30%,#061a42 62%,#020a1c 100%)}
+#far{z-index:1;opacity:.9}
+.rays{z-index:2;mix-blend-mode:screen;opacity:.9;overflow:hidden}
+.rays i{position:absolute;left:-30%;top:-10%;width:160%;height:90%;transform-origin:50% 0;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 85%);mask-image:linear-gradient(to bottom,#000 0%,transparent 85%)}
+.rays i:nth-child(1){background:repeating-linear-gradient(102deg,transparent 0 70px,rgba(140,205,255,.07) 70px 105px,transparent 105px 190px);animation:ray 14s ease-in-out infinite alternate}
+.rays i:nth-child(2){background:repeating-linear-gradient(96deg,transparent 0 120px,rgba(170,225,255,.05) 120px 140px,transparent 140px 260px);animation:ray 19s ease-in-out -6s infinite alternate-reverse}
+@keyframes ray{from{transform:skewX(-7deg) translateX(-4%)}to{transform:skewX(7deg) translateX(4%)}}
+#mid{z-index:3;image-rendering:pixelated;image-rendering:crisp-edges}
+.grain{z-index:4;opacity:.05;background:repeating-conic-gradient(#fff 0 25%,transparent 0 50%) 0 0/2px 2px}
+.abyss{z-index:5;opacity:var(--abyss);background:linear-gradient(to bottom,rgba(1,6,15,.2),#01060f 90%)}
+
+/* ============ HEADER ============ */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:50;height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:0 18px;padding-top:env(safe-area-inset-top);background:rgba(2,12,32,.38);
+  backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:600 12px var(--sans);letter-spacing:.24em}
+.brand canvas{width:30px;height:30px;image-rendering:pixelated}
+.depth{font:12px var(--pix);color:var(--cyan);letter-spacing:.14em;margin-left:auto}
+.menu-btn{display:flex;align-items:center;gap:8px;background:none;border:0;color:var(--text);font:600 11px var(--sans);letter-spacing:.2em;cursor:pointer;padding:10px 0 10px 8px}
+.menu-btn span{display:grid;gap:5px}
+.menu-btn span i{display:block;width:20px;height:1.5px;background:currentColor}
+.menu-btn span i:last-child{width:13px;margin-left:auto}
+.progress{position:absolute;left:0;bottom:-1px;height:1px;width:0;background:linear-gradient(90deg,var(--cyan),var(--yellow))}
+
+.menu{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;justify-content:center;padding:80px 28px 40px;
+  background:rgba(2,10,28,.82);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s}
+.menu.open{opacity:1;visibility:visible}
+.menu .close{position:absolute;top:14px;right:18px;background:none;border:0;color:var(--text);font:600 11px var(--sans);letter-spacing:.2em;padding:12px 0;cursor:pointer}
+.menu ol{list-style:none;max-width:520px;margin:0 auto;width:100%}
+.menu li{border-top:1px solid var(--line);opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s cubic-bezier(.2,.7,.2,1)}
+.menu li:last-child{border-bottom:1px solid var(--line)}
+.menu.open li{opacity:1;transform:none}
+.menu.open li:nth-child(2){transition-delay:.06s}.menu.open li:nth-child(3){transition-delay:.12s}.menu.open li:nth-child(4){transition-delay:.18s}
+.menu a{display:flex;align-items:baseline;gap:16px;padding:18px 0;text-decoration:none}
+.menu .n{font:12px var(--pix);color:var(--cyan)}
+.menu .t{font:italic 40px/1 var(--serif)}
+.menu .j{margin-left:auto;font:12px var(--jp);color:var(--muted)}
+
+/* ============ LAYOUT ============ */
+main{position:relative;z-index:10}
+.wrap{max-width:560px;margin:0 auto;padding:0 22px}
+section{position:relative;padding:110px 0 40px;scroll-margin-top:40px}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 1.2s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.shead{display:flex;align-items:center;gap:12px;font:600 11px var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.shead .idx{font:12px var(--pix);color:var(--yellow);letter-spacing:.1em}
+.shead .rule{flex:0 0 36px;height:1px;background:var(--line)}
+h2{font:400 clamp(48px,14vw,76px)/1 var(--serif);margin-top:18px;letter-spacing:-.01em}
+h2 em{color:var(--cyan)}
+.jsub{font:13px var(--jp);color:var(--muted);margin-top:10px;letter-spacing:.2em}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:22px;
+  backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 24px;border-radius:999px;
+  font:600 14px var(--sans);letter-spacing:.08em;text-decoration:none;cursor:pointer;border:0;transition:transform .35s cubic-bezier(.2,.7,.2,1),background .35s,box-shadow .35s}
+.btn .arr{display:inline-block;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.btn:hover .arr{transform:translate(3px,-3px)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--yellow);color:#06142e;box-shadow:0 12px 34px -10px rgba(255,224,60,.6)}
+.btn.ghost{background:rgba(255,255,255,.05);color:var(--text);border:1px solid rgba(180,210,255,.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.btn.block{display:flex;width:100%}
+
+/* ============ HERO ============ */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:100px 0 44px}
+.eyebrow{display:flex;align-items:center;gap:12px;font:600 11px var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--cyan)}
+.eyebrow::before{content:"";width:28px;height:1px;background:currentColor}
+.title{margin-top:18px;line-height:.86;text-shadow:0 4px 40px rgba(0,10,40,.6)}
+.title .a{display:block;font:italic 400 clamp(84px,27vw,156px)/.86 var(--serif);letter-spacing:-.02em}
+.title .b{display:block;font:400 clamp(70px,22vw,128px)/1 var(--pix);letter-spacing:.02em;margin-left:.08em;
+  background:repeating-conic-gradient(var(--yellow) 0 25%,#d8b400 0 50%) 0 0/4px 4px;-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 22px rgba(255,224,60,.35))}
+.vjp{position:absolute;right:0;top:120px;writing-mode:vertical-rl;font:13px var(--jp);letter-spacing:.5em;color:var(--muted);display:flex;align-items:center;gap:14px}
+.vjp::after{content:"";width:1px;height:70px;background:var(--line)}
+.byline{margin-top:28px;display:grid;gap:4px}
+.byline small{font:600 10px var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.byline strong{font:700 26px/1.3 var(--jp);letter-spacing:.06em}
+.byline strong em{font:italic 400 20px var(--serif);color:var(--muted);margin-left:10px;letter-spacing:0}
+.byline .orig{font:13px var(--jp);color:var(--muted)}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.dive{display:flex;align-items:center;gap:14px;margin-top:46px;font:600 10px var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.dive i{position:relative;width:1px;height:46px;background:var(--line);overflow:hidden}
+.dive i::after{content:"";position:absolute;left:0;top:-50%;width:1px;height:50%;background:var(--cyan);animation:drop 2.2s cubic-bezier(.6,0,.3,1) infinite}
+@keyframes drop{to{top:110%}}
+
+/* ============ TICKER ============ */
+.ticker{position:relative;z-index:10;margin:20px -10% 0;width:120%;transform:rotate(-3deg);background:var(--yellow);color:#06142e;
+  overflow:hidden;white-space:nowrap;padding:10px 0;box-shadow:0 20px 50px -20px rgba(255,224,60,.5)}
+.ticker .track{display:inline-flex;animation:tick 26s linear infinite}
+.ticker span{font:15px var(--pix);letter-spacing:.14em;padding-right:28px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ============ WATCH / TV ============ */
+.tv{display:block;margin-top:34px;padding:16px 16px 14px;border-radius:30px;text-decoration:none;color:inherit;
+  background:linear-gradient(160deg,rgba(48,86,156,.5),rgba(6,18,46,.72));border:1px solid rgba(160,200,255,.22);
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.14);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.tv:hover{transform:translateY(-4px)}
+.crt{position:relative;border-radius:24px/28px;overflow:hidden;background:#000;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.7),0 0 50px -6px rgba(70,150,255,.5)}
+.crt canvas{display:block;width:100%;height:auto;aspect-ratio:4/3;image-rendering:pixelated;image-rendering:crisp-edges}
+.crt .fx{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 28% 8%,rgba(255,255,255,.2),transparent 42%),
+  repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px),
+  radial-gradient(ellipse at center,transparent 58%,rgba(0,0,0,.6))}
+.osd{position:absolute;top:12px;left:16px;font:13px var(--pix);color:#fff;text-shadow:2px 2px 0 rgba(0,20,80,.8);letter-spacing:.1em}
+.osd.r{left:auto;right:16px;display:flex;align-items:center;gap:6px}
+.osd.r::before{content:"";width:7px;height:7px;border-radius:50%;background:#ff5a5a;animation:blink 1.4s steps(1) infinite}
+.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:10px;
+  padding:12px 20px;border-radius:999px;background:rgba(2,12,34,.55);border:1px solid rgba(255,255,255,.35);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font:600 12px var(--sans);letter-spacing:.24em;transition:background .4s}
+.play b{width:0;height:0;border-left:11px solid var(--yellow);border-top:7px solid transparent;border-bottom:7px solid transparent}
+.tv:hover .play{background:rgba(2,12,34,.8)}
+@keyframes blink{50%{opacity:0}}
+.tv-foot{display:flex;align-items:center;gap:12px;margin-top:14px;padding:0 4px}
+.knob{width:26px;height:26px;border-radius:50%;flex:none;background:radial-gradient(circle at 35% 30%,#dfe9ff 0 2px,#5a7cc0 3px,#1c3263 70%);box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.tv-label{font:11px var(--pix);letter-spacing:.24em;color:var(--muted)}
+.grille{flex:1;height:18px;border-radius:4px;background:repeating-linear-gradient(90deg,rgba(160,200,255,.28) 0 1px,transparent 1px 5px)}
+
+.placard{position:relative;margin-top:24px;padding:24px 22px 16px;overflow:hidden}
+.placard::before{content:"";position:absolute;left:22px;top:0;width:44px;height:3px;background:var(--yellow)}
+.placard .ph{display:flex;justify-content:space-between;font:11px var(--pix);letter-spacing:.2em;color:var(--cyan)}
+.placard h3{font:400 50px/1 var(--serif);margin-top:14px}
+.placard .sci{font:italic 17px var(--serif);color:var(--muted);margin-top:4px}
+.placard .ja{font:13px var(--jp);letter-spacing:.2em;margin-top:6px}
+.specs{margin-top:18px}
+.specs div{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.specs dt{font:600 10px var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.specs dd{font:14px var(--jp);text-align:right}
+.specs dd a{text-decoration:none;border-bottom:1px solid rgba(127,220,255,.5)}
+.watch-cta{margin-top:18px}
+
+/* ============ SINGER ============ */
+.singer{margin-top:34px;padding:26px 22px 22px}
+.s-top{display:flex;align-items:center;gap:18px}
+.avatar{position:relative;width:96px;height:96px;flex:none;border-radius:50%;display:grid;place-items:center;
+  border:1px solid rgba(160,200,255,.35);background:repeating-linear-gradient(135deg,rgba(143,180,245,.4) 0 2px,transparent 2px 6px)}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.kanji{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font:38px/1 var(--pix);color:var(--yellow);
+  background:rgba(2,12,34,.8);border:1px solid rgba(255,224,60,.45);box-shadow:0 0 24px rgba(255,224,60,.2)}
+.ribbon{position:absolute;top:-4px;right:-12px;width:42px;height:24px;animation:sway 3s ease-in-out infinite alternate}
+.ribbon::before,.ribbon::after{content:"";position:absolute;top:0;width:21px;height:24px;background:repeating-linear-gradient(90deg,var(--brown) 0 3px,var(--brown2) 3px 6px)}
+.ribbon::before{left:0;clip-path:polygon(0 0,100% 40%,100% 60%,0 100%)}
+.ribbon::after{right:0;clip-path:polygon(100% 0,0 40%,0 60%,100% 100%)}
+.ribbon i{position:absolute;left:50%;top:50%;width:10px;height:10px;transform:translate(-50%,-50%);background:#d9a441;border:2px solid var(--brown);z-index:1}
+@keyframes sway{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+.s-tag{font:11px var(--pix);letter-spacing:.2em;color:var(--cyan)}
+.s-name{font:700 30px/1.25 var(--jp);letter-spacing:.06em;margin-top:4px}
+.s-roman{font:italic 19px var(--serif);color:var(--muted)}
+.s-text{font:14px/1.9 var(--jp);color:#c9d8f2;margin:18px 0 20px}
+
+/* ============ CREDITS ============ */
+.credits{margin-top:30px}
+.credits div{display:grid;grid-template-columns:auto 1fr;align-items:baseline;gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.credits div:last-child{border-bottom:1px solid var(--line)}
+.credits dt{font:600 10px var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.credits dd{text-align:right;font:16px var(--jp)}
+.share{margin-top:28px}
+.outro{text-align:center;padding:120px 0 60px}
+.outro p{font:italic 400 clamp(44px,13vw,70px)/1.02 var(--serif)}
+.outro p span{color:var(--yellow)}
+.outro small{display:block;margin-top:16px;font:13px var(--jp);color:var(--muted);letter-spacing:.14em}
+footer{position:relative;z-index:10;text-align:center;padding:0 22px 150px;font:11px/2 var(--sans);color:var(--dim);letter-spacing:.06em}
+footer .jp{font-family:var(--jp)}
+
+@media (min-width:760px){
+  .wrap{max-width:620px}
+  .vjp{right:-40px}
+}
+@media (prefers-reduced-motion:reduce){
+  .rays i,.ticker .track,.dive i::after,.ribbon{animation:none!important}
+  .reveal{transition:none;opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ background layers ============ -->
+<div class="ocean"></div>
+<canvas id="far"></canvas>
+<div class="rays"><i></i><i></i></div>
+<canvas id="mid"></canvas>
+<div class="grain"></div>
+<div class="abyss"></div>
+
+<!-- ============ header ============ -->
+<header class="hdr">
+  <a class="brand" href="#intro"><canvas id="icon" width="30" height="30"></canvas>ANGEL FISH</a>
+  <span class="depth" id="depth">DEPTH 00M</span>
+  <button class="menu-btn" id="menuOpen" type="button" aria-label="Open menu">MENU<span><i></i><i></i></span></button>
+  <span class="progress" id="progress"></span>
+</header>
+
+<nav class="menu" id="menu" aria-label="Menu">
+  <button class="close" id="menuClose" type="button">CLOSE ✕</button>
+  <ol>
+    <li><a href="#intro"><span class="n">01</span><span class="t">Intro</span><span class="j">イントロ</span></a></li>
+    <li><a href="#watch"><span class="n">02</span><span class="t">Watch</span><span class="j">MVを観る</span></a></li>
+    <li><a href="#singer"><span class="n">03</span><span class="t">Singer</span><span class="j">うたったひと</span></a></li>
+    <li><a href="#credits"><span class="n">04</span><span class="t">Credits</span><span class="j">クレジット</span></a></li>
+  </ol>
+</nav>
+
+<main>
+  <!-- ============ 01 INTRO ============ -->
+  <section id="intro" class="hero">
+    <div class="wrap" style="position:relative;width:100%">
+      <p class="vjp reveal">エンゼルフィッシュ　歌ってみた</p>
+      <p class="eyebrow reveal">Cover Song / 歌ってみた</p>
+      <h1 class="title reveal"><span class="a">Angel</span><span class="b">FISH</span></h1>
+      <div class="byline reveal">
+        <small>Covered by</small>
+        <strong>ときの嶋<em>Tokino Shima</em></strong>
+        <span class="orig">Original — パトリチェフ</span>
+      </div>
+      <div class="cta reveal">
+        <a class="btn primary" data-link="mv" target="_blank" rel="noopener">Watch the MV <span class="arr">↗</span></a>
+        <a class="btn ghost" data-link="x" target="_blank" rel="noopener">Follow on 𝕏</a>
+      </div>
+      <div class="dive reveal"><i></i>Scroll to dive</div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div class="track" id="track"></div></div>
+
+  <!-- ============ 02 WATCH ============ -->
+  <section id="watch">
+    <div class="wrap">
+      <div class="shead reveal"><span class="idx">02</span><span class="rule"></span>Watch</div>
+      <h2 class="reveal">Now <em>Showing</em></h2>
+      <p class="jsub reveal">MVを観る</p>
+
+      <a class="tv reveal" data-link="mv" target="_blank" rel="noopener" aria-label="YouTubeでMVを観る">
+        <div class="crt">
+          <canvas id="tvCanvas" width="160" height="120"></canvas>
+          <div class="fx"></div>
+          <span class="osd">CH 01</span>
+          <span class="osd r">ON AIR</span>
+          <span class="play"><b></b>PLAY</span>
+        </div>
+        <div class="tv-foot"><span class="knob"></span><span class="tv-label">AQUA VISION</span><span class="grille"></span><span class="knob"></span></div>
+      </a>
+
+      <article class="placard glass reveal">
+        <div class="ph"><span>EXHIBIT</span><span>No.01</span></div>
+        <h3>Angelfish</h3>
+        <p class="sci">Pterophyllum scalare</p>
+        <p class="ja">エンゼルフィッシュ</p>
+        <dl class="specs">
+          <div><dt>Original</dt><dd>パトリチェフ</dd></div>
+          <div><dt>Cover</dt><dd>ときの嶋</dd></div>
+          <div><dt>Format</dt><dd>歌ってみた / Cover</dd></div>
+        </dl>
+      </article>
+      <div class="watch-cta reveal"><a class="btn primary block" data-link="mv" target="_blank" rel="noopener">Watch on YouTube <span class="arr">↗</span></a></div>
+    </div>
+  </section>
+
+  <!-- ============ 03 SINGER ============ -->
+  <section id="singer">
+    <div class="wrap">
+      <div class="shead reveal"><span class="idx">03</span><span class="rule"></span>Singer</div>
+      <h2 class="reveal">The <em>Singer</em></h2>
+      <p class="jsub reveal">うたったひと</p>
+
+      <article class="singer glass reveal">
+        <div class="s-top">
+          <div class="avatar">
+            <img id="avatarImg" alt="ときの嶋" hidden>
+            <span class="kanji" id="avatarKanji">嶋</span>
+            <span class="ribbon"><i></i></span>
+          </div>
+          <div>
+            <p class="s-tag">EXHIBIT No.02</p>
+            <p class="s-name">ときの嶋</p>
+            <p class="s-roman">Tokino Shima</p>
+          </div>
+        </div>
+        <dl class="specs">
+          <div><dt>Category</dt><dd>Liver / ライバー</dd></div>
+          <div><dt>Style</dt><dd>Maid / メイド</dd></div>
+          <div><dt>Habitat</dt><dd><a data-link="x" target="_blank" rel="noopener">𝕏 @Shimq_Time</a></dd></div>
+        </dl>
+        <p class="s-text">このサイトは、ときの嶋さんの歌ってみた「エンゼルフィッシュ」を応援する非公式ファンサイトです。最新の活動はXをチェック。</p>
+        <a class="btn ghost block" data-link="x" target="_blank" rel="noopener">Follow @Shimq_Time <span class="arr">↗</span></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 04 CREDITS ============ -->
+  <section id="credits">
+    <div class="wrap">
+      <div class="shead reveal"><span class="idx">04</span><span class="rule"></span>Credits</div>
+      <h2 class="reveal"><em>Credits</em></h2>
+      <p class="jsub reveal">クレジット</p>
+      <dl class="credits reveal" id="cred"></dl>
+      <div class="share reveal"><a class="btn primary block" id="shareBtn" target="_blank" rel="noopener">Share on 𝕏 <span class="arr">↗</span></a></div>
+      <div class="outro reveal">
+        <p>Thank you<br>for <span>listening.</span></p>
+        <small>最後まで見てくれてありがとう</small>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Unofficial fan site — All rights belong to their respective owners.<br>
+  <span class="jp">本サイトはファンによる非公式サイトです。楽曲・映像・イラストの権利は各権利者に帰属します。</span>
+</footer>
+
+<script>
+/* ============================================================
+   CONFIG — ここを書き換えるだけで内容を更新できます
+   ============================================================ */
+const CONFIG = {
+  liver: 'ときの嶋',
+  x: 'https://x.com/Shimq_Time',
+  mv: 'https://youtu.be/-MHugzAhwz4',
+  avatar: '',   // 立ち絵やアイコン画像のURLを入れるとプロフィールに表示されます
+  credits: [
+    { role: 'Song',   name: 'エンゼルフィッシュ' },
+    { role: 'Music',  name: 'パトリチェフ' },
+    { role: 'Vocal',  name: 'ときの嶋' },
+    // { role: 'Mix',    name: '' },
+    // { role: 'Illust', name: '' },
+    // { role: 'Movie',  name: '' },
+  ],
+};
+
+const $ = s => document.querySelector(s);
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('[data-link="mv"]').forEach(a => a.href = CONFIG.mv);
+document.querySelectorAll('[data-link="x"]').forEach(a => a.href = CONFIG.x);
+
+/* ============================================================
+   FLIPNOTE-STYLE SPRITES
+   ベクターで描いた魚を、ディザ(網点)＋限定パレットでドット化
+   ============================================================ */
+const BAYER = [0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5].map(v => (v + .5) / 16);
+const bay = (x, y) => BAYER[(y & 3) * 4 + (x & 3)];
+function mk(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+function layer(S) { const c = mk(S, S), g = c.getContext('2d'); g.setTransform(S / 100, 0, 0, S / 100, 0, 0); return { c, g }; }
+const dataOf = l => l.g.getImageData(0, 0, l.c.width, l.c.height).data;
+
+function compose(S, L, pal, eye) {
+  const bd = dataOf(L.B), fd = dataOf(L.F), sd = dataOf(L.ST), hd = dataOf(L.SH), ld = L.FL ? dataOf(L.FL) : null;
+  const out = mk(S, S), g = out.getContext('2d'), im = g.createImageData(S, S), o = im.data;
+  const inB = (x, y) => x >= 0 && y >= 0 && x < S && y < S && bd[(y * S + x) * 4 + 3] > 110;
+  const inF = (x, y) => x >= 0 && y >= 0 && x < S && y < S && fd[(y * S + x) * 4 + 3] > 110;
+  const any = (x, y) => inB(x, y) || inF(x, y);
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const j = (y * S + x) * 4, b = inB(x, y), f = !b && inF(x, y), d = bay(x, y);
+    let c = null, a = 255;
+    if (b || f) {
+      const edge = !any(x - 1, y) || !any(x + 1, y) || !any(x, y - 1) || !any(x, y + 1);
+      const st = sd[j + 3] > 110;
+      if (edge) { c = pal.line; a = b ? 255 : 215; }
+      else if (b) c = pal.body(x / S, y / S, d, st, hd[j] / 255);
+      else { c = pal.fin(d, st); a = pal.finA; }
+    } else if (ld && ld[j + 3] > 110) { c = pal.fil; a = 215; }
+    if (c) { o[j] = c[0]; o[j + 1] = c[1]; o[j + 2] = c[2]; o[j + 3] = a; }
+  }
+  g.putImageData(im, 0, 0);
+  if (eye) {
+    const cx = eye[0] * S / 100, cy = eye[1] * S / 100, r = Math.max(.8, eye[2] * S / 100), R = Math.ceil(r);
+    const rgb = c => `rgb(${c[0]},${c[1]},${c[2]})`;
+    for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) {
+      const dd = Math.hypot(dx, dy); if (dd > r) continue;
+      g.fillStyle = rgb(dd > r - 1 ? pal.line : pal.eye); g.fillRect(Math.round(cx + dx), Math.round(cy + dy), 1, 1);
+    }
+    if (r >= 2) { g.fillStyle = '#fff'; g.fillRect(Math.round(cx - r / 3), Math.round(cy - r / 3), 1, 1); }
+  }
+  return out;
+}
+
+const C = { Y: [255, 224, 60], YL: [255, 246, 186], INK: [18, 56, 158], LINE: [10, 30, 96], FIL: [255, 236, 150] };
+const ANGEL_PAL = {
+  line: C.LINE, eye: C.INK, fil: C.FIL, finA: 170,
+  body(nx, ny, d, st, v) {
+    if (st) return d < .5 ? C.INK : C.Y;
+    const dk = 1 - v;
+    if (d < (dk - .38) * 1.3) return C.INK;
+    if (v > .86 && d < (v - .86) * 5) return C.YL;
+    return C.Y;
+  },
+  fin(d, st) { return (st && d < .5) || d < .08 ? C.INK : C.Y; },
+};
+function angelFrame(S, ph) {
+  const sw = Math.sin(ph) * 3, sw2 = Math.sin(ph + 1.3) * 4, tl = 1 + Math.sin(ph + .6) * .1;
+  const L = { B: layer(S), F: layer(S), ST: layer(S), SH: layer(S), FL: layer(S) };
+  const body = new Path2D();
+  body.moveTo(16, 50); body.bezierCurveTo(18, 38, 30, 29, 42, 29); body.bezierCurveTo(54, 29, 62, 38, 69, 47);
+  body.lineTo(69, 53); body.bezierCurveTo(62, 62, 54, 71, 42, 71); body.bezierCurveTo(30, 71, 18, 62, 16, 50); body.closePath();
+  L.B.g.fill(body);
+  const fins = new Path2D();
+  fins.moveTo(33, 32); fins.bezierCurveTo(40, 20, 50, 10, 62 + sw, 2); fins.bezierCurveTo(63 + sw * .5, 18, 66, 34, 68, 46); fins.lineTo(50, 34); fins.closePath();
+  fins.moveTo(33, 68); fins.bezierCurveTo(40, 80, 50, 90, 62 - sw, 98); fins.bezierCurveTo(63 - sw * .5, 82, 66, 66, 68, 54); fins.lineTo(50, 66); fins.closePath();
+  const tx = 67, tw = 22 * tl;
+  fins.moveTo(tx, 50); fins.bezierCurveTo(tx + 6, 44, tx + tw * .7, 36, tx + tw, 33 + sw * .4);
+  fins.bezierCurveTo(tx + tw * .8, 44, tx + tw * .8, 56, tx + tw, 67 + sw * .4); fins.bezierCurveTo(tx + tw * .7, 64, tx + 6, 56, tx, 50); fins.closePath();
+  L.F.g.fill(fins);
+  const s = L.ST.g; s.lineCap = 'round'; s.lineWidth = 5.5; s.beginPath();
+  s.moveTo(27, 33); s.quadraticCurveTo(24, 50, 27, 67);
+  s.moveTo(44, 20); s.quadraticCurveTo(40, 50, 44, 82);
+  s.moveTo(60 + sw * .6, 6); s.quadraticCurveTo(56, 50, 60 - sw * .6, 94); s.stroke();
+  const gr = L.SH.g.createRadialGradient(36, 42, 2, 40, 48, 36); gr.addColorStop(0, '#fff'); gr.addColorStop(1, '#444');
+  L.SH.g.fillStyle = gr; L.SH.g.fill(body);
+  const f = L.FL.g; f.lineCap = 'round'; f.lineWidth = Math.max(1.4, 100 / S * 1.1); f.beginPath();
+  f.moveTo(36, 64); f.quadraticCurveTo(33, 80, 26 + sw2, 97);
+  f.moveTo(39, 65); f.quadraticCurveTo(38, 82, 33 + sw2, 99); f.stroke();
+  return compose(S, L, ANGEL_PAL, [25, 45, 3.4]);
+}
+
+const T_BW = [222, 236, 255], T_SH = [60, 110, 210], T_CY = [120, 230, 255];
+const TETRA_PAL = {
+  line: [22, 54, 128], eye: [16, 40, 110], finA: 140,
+  body(nx, ny, d, st, v) {
+    if (st) return T_CY;
+    if (nx > .52 && nx < .72 && ny > .52 && ny < .6 && d < .8) return C.Y;
+    if (d < ((1 - v) - .35) * 1.4) return T_SH;
+    return T_BW;
+  },
+  fin(d) { return d < .12 ? T_SH : T_BW; },
+};
+function tetraFrame(S, ph) {
+  const sw = Math.sin(ph) * 4;
+  const L = { B: layer(S), F: layer(S), ST: layer(S), SH: layer(S) };
+  const body = new Path2D(); body.ellipse(46, 50, 29, 11.5, 0, 0, Math.PI * 2);
+  L.B.g.fill(body);
+  const fins = new Path2D();
+  fins.moveTo(71, 50); fins.lineTo(96, 37 + sw); fins.quadraticCurveTo(87, 50, 96, 63 + sw); fins.closePath();
+  fins.moveTo(44, 40); fins.lineTo(56, 30 + sw * .3); fins.lineTo(62, 40); fins.closePath();
+  fins.moveTo(50, 60); fins.lineTo(62, 68); fins.lineTo(66, 60); fins.closePath();
+  L.F.g.fill(fins);
+  const s = L.ST.g; s.lineWidth = 3.6; s.lineCap = 'round'; s.beginPath(); s.moveTo(24, 47); s.quadraticCurveTo(48, 43, 72, 48); s.stroke();
+  const gr = L.SH.g.createRadialGradient(38, 44, 2, 44, 50, 30); gr.addColorStop(0, '#fff'); gr.addColorStop(1, '#555');
+  L.SH.g.fillStyle = gr; L.SH.g.fill(body);
+  return compose(S, L, TETRA_PAL, [24, 48, 3]);
+}
+function frames(fn, S, N = 12) { return Array.from({ length: N }, (_, i) => fn(S, i / N * Math.PI * 2)); }
+function tint(src, color) {
+  const c = mk(src.width, src.height), g = c.getContext('2d');
+  g.drawImage(src, 0, 0); g.globalCompositeOperation = 'source-in'; g.fillStyle = color; g.fillRect(0, 0, c.width, c.height); return c;
+}
+function bubbleSprite(r) {
+  const s = r * 2 + 3, c = mk(s, s), g = c.getContext('2d'), m = r + 1;
+  for (let y = 0; y < s; y++) for (let x = 0; x < s; x++) {
+    const d = Math.hypot(x - m, y - m); if (d > r + .3) continue;
+    if (d > r - .8) { g.fillStyle = 'rgba(210,235,255,.85)'; g.fillRect(x, y, 1, 1); }
+    else if (((x + y) & 1) === 0) { g.fillStyle = 'rgba(190,225,255,.28)'; g.fillRect(x, y, 1, 1); }
+  }
+  if (r >= 2) { g.fillStyle = '#fff'; g.fillRect(m - Math.ceil(r / 2), m - Math.ceil(r / 2), 1, 1); }
+  return c;
+}
+function dotSprite(r) {
+  const s = r * 2 + 1, c = mk(s, s), g = c.getContext('2d');
+  g.fillStyle = '#eaf4ff';
+  for (let y = 0; y < s; y++) for (let x = 0; x < s; x++) if (Math.hypot(x - r, y - r) <= r + .2 && ((x + y) & 1) === 0) g.fillRect(x, y, 1, 1);
+  return c;
+}
+
+const SPR = {
+  A64: frames(angelFrame, 64), A44: frames(angelFrame, 44), A30: frames(angelFrame, 30),
+  T34: frames(tetraFrame, 34),
+};
+SPR.FAR = SPR.A64.map(f => tint(f, '#6d9ee8'));
+SPR.FART = SPR.T34.map(f => tint(f, '#6d9ee8'));
+const BUB = [1, 2, 3, 4, 5].map(bubbleSprite);
+const DOT = dotSprite(5);
+
+/* ============================================================
+   FISH MOVEMENT (smooth, 60fps)
+   ============================================================ */
+let W = innerWidth, H = innerHeight;
+const SPEED = REDUCE ? .35 : 1;
+function spawn(f, enter) {
+  const s = Math.random() < .5 ? -1 : 1;
+  f.facing = s; f.sx = s;
+  f.x = enter ? (s < 0 ? W + f.size : -f.size) : Math.random() * W;
+  f.baseY = f.ty = H * (.08 + Math.random() * .8); f.y = f.baseY; f.vx = s * f.speed;
+}
+function newFish(o) {
+  const f = Object.assign({ facing: -1, sx: 1, vx: 0, speed: 30, amp: 8, wf: .7 + Math.random() * .4, ph: Math.random() * 6.3,
+    fr: Math.random() * 12, t: 0, turnCD: 4 + Math.random() * 8, size: 128, alpha: 1 }, o);
+  spawn(f, false); return f;
+}
+function updFish(f, dt) {
+  f.t += dt; f.turnCD -= dt;
+  if (f.turnCD < 0) {
+    f.turnCD = 6 + Math.random() * 10;
+    if (Math.random() < .4 && f.x > W * .15 && f.x < W * .85) f.facing *= -1;
+    f.ty = H * (.08 + Math.random() * .8);
+  }
+  const sp = f.speed * SPEED;
+  f.vx += (f.facing * sp - f.vx) * Math.min(1, dt * .9);
+  f.x += f.vx * dt;
+  f.baseY += (f.ty - f.baseY) * Math.min(1, dt * .15);
+  f.y = f.baseY + Math.sin(f.t * f.wf + f.ph) * f.amp;
+  f.sx += (f.facing - f.sx) * Math.min(1, dt * 3.5);
+  f.fr += dt * 12;
+  if ((f.facing < 0 && f.x < -f.size) || (f.facing > 0 && f.x > W + f.size)) spawn(f, true);
+}
+
+const far = $('#far'), mid = $('#mid'), fg = far.getContext('2d'), mg = mid.getContext('2d');
+function resize() {
+  W = innerWidth; H = innerHeight;
+  far.width = Math.ceil(W / 5); far.height = Math.ceil(H / 5);
+  mid.width = Math.ceil(W / 2); mid.height = Math.ceil(H / 2);
+  mg.imageSmoothingEnabled = false; fg.imageSmoothingEnabled = true;
+}
+resize();
+addEventListener('resize', resize);
+
+const angels = [
+  newFish({ spr: SPR.A64, size: 128, speed: 34, alpha: .95 }),
+  newFish({ spr: SPR.A64, size: 128, speed: 26, alpha: .9 }),
+  newFish({ spr: SPR.A44, size: 88, speed: 24, alpha: .62 }),
+  newFish({ spr: SPR.A44, size: 88, speed: 20, alpha: .55 }),
+];
+const farFish = Array.from({ length: 8 }, (_, i) => {
+  const tetra = i > 5, k = tetra ? .5 + Math.random() * .2 : .28 + Math.random() * .22;
+  return newFish({ spr: tetra ? SPR.FART : SPR.FAR, k, size: (tetra ? 34 : 64) * k * 5, speed: 9 + Math.random() * 9, amp: 12, alpha: .18 + Math.random() * .2 });
+});
+const leader = newFish({ size: 70, speed: 42, amp: 14 });
+const school = Array.from({ length: 9 }, () => ({
+  ox: (Math.random() - .5) * 130, oy: (Math.random() - .5) * 70, x: leader.x, y: leader.y, sx: leader.facing, facing: leader.facing,
+  fr: Math.random() * 12, lag: .9 + Math.random() * .8, alpha: .55 + Math.random() * .3,
+}));
+const bubbles = [];
+function addBubble(x, y, r) {
+  if (bubbles.length > 46) return;
+  bubbles.push({ x, y, r: r ?? (Math.random() * 5 | 0), vy: 22 + Math.random() * 34, ph: Math.random() * 6.3, a: .5 + Math.random() * .5 });
+}
+for (let i = 0; i < 18; i++) addBubble(Math.random() * W, Math.random() * H);
+
+function drawSpr(g, img, x, y, sx, sc, alpha) {
+  if (Math.abs(sx) < .03) return;
+  g.globalAlpha = alpha; g.setTransform(sx * sc, 0, 0, sc, x, y); g.drawImage(img, -img.width / 2, -img.height / 2);
+}
+
+/* --- equalizer dots (bottom overlay) --- */
+function drawEQ(t) {
+  const gap = 26, cols = Math.ceil(W / gap) + 1, rows = 7;
+  for (let c = 0; c < cols; c++) {
+    const lv = rows * (.2 + .8 * (.5 + .5 * Math.sin(t * 1.1 + c * .55)) * (.55 + .45 * Math.sin(t * .43 + c * 1.7 + Math.sin(t * .2))));
+    for (let r = 0; r < Math.ceil(lv); r++) {
+      const part = Math.min(1, lv - r);
+      mg.globalAlpha = part * (.34 - r * .04);
+      mg.setTransform(1, 0, 0, 1, 0, 0);
+      mg.drawImage(DOT, Math.round((13 + c * gap) / 2 - 5), Math.round((H - 20 - r * 24) / 2 - 5));
+    }
+  }
+}
+
+/* ============================================================
+   TV SCREEN
+   ============================================================ */
+function rng(s) { return () => (s = s * 16807 % 2147483647) / 2147483647; }
+function branch(g, x, y, a, len, w, d, r) {
+  for (let i = 0; i < len; i++) {
+    x += Math.cos(a); y += Math.sin(a); a += (r() - .5) * .3 + ((-Math.PI / 2) - a) * .04;
+    for (let ox = -w; ox <= w + 1; ox++) for (let oy = -w; oy <= w; oy++) {
+      const px = Math.round(x + ox), py = Math.round(y + oy); if (((px + py) & 1) === 0) g.fillRect(px, py, 1, 1);
+    }
+    if (d > 0 && i > 3 && r() < .1) branch(g, x, y, a + (r() < .5 ? -1 : 1) * (.45 + r() * .5), (len - i) * .7 | 0, Math.max(0, w - 1), d - 1, r);
+  }
+}
+function makeBg(Wd, Hd, seed) {
+  const c = mk(Wd, Hd), g = c.getContext('2d'), r = rng(seed);
+  g.fillStyle = '#1f5fe0'; g.fillRect(0, 0, Wd, Hd);
+  g.fillStyle = '#9cc0ff';
+  for (let y = 0; y < 7; y++) for (let x = 0; x < Wd; x++)
+    if (y < 2 || (y < 4 && ((x + y) & 1) === 0) || (x * 3 + y * 5) % 11 === 0) g.fillRect(x, y, 1, 1);
+  g.fillStyle = '#4f86ee';
+  const Lh = Hd * .72;
+  for (let x0 = 14; x0 < Wd + 40; x0 += 34) for (let t = 0; t < Lh; t++) {
+    const w = Math.max(1, 7 - (t / Lh) * 6 | 0);
+    for (let k = 0; k < w; k++) { const px = (x0 + k - t * .35) | 0, py = t + 7; if (((px + py) & 1) === 0) g.fillRect(px, py, 1, 1); }
+  }
+  g.fillStyle = '#c8dcff';
+  const s = Hd / 200;
+  [.1, .3, .52, .72, .9].forEach(fx => {
+    for (let i = 0; i < 3; i++) branch(g, fx * Wd + (r() * 10 - 5), Hd - 6, -Math.PI / 2 + (r() - .5) * .9, ((26 + r() * 18) * s) | 0, s > .6 ? 1 : 0, 2, r);
+  });
+  for (let y = Hd - 8; y < Hd; y++) for (let x = 0; x < Wd; x++) {
+    const dn = y - (Hd - 8); if (((x + y) & 1) === 0 && (dn > 3 || (x * 7 + y * 3) % 5 === 0)) g.fillRect(x, y, 1, 1);
+  }
+  return c;
+}
+const tvc = $('#tvCanvas'), tg = tvc.getContext('2d'); tg.imageSmoothingEnabled = false;
+const tvBg = makeBg(160, 120, 5);
+const TV = { x: 110, facing: -1, sx: 1, t: 0, fr: 0, bub: [] };
+function stepTV(dt) {
+  TV.t += dt; TV.fr += dt * 12;
+  TV.x += TV.facing * 20 * dt * SPEED;
+  if (TV.x < 28) TV.facing = 1; if (TV.x > 132) TV.facing = -1;
+  TV.sx += (TV.facing - TV.sx) * Math.min(1, dt * 3.5);
+  if (Math.random() < dt * 3) TV.bub.push({ x: 8 + Math.random() * 144, y: 112, r: Math.random() * 3 | 0 });
+  TV.bub.forEach(b => { b.y -= 26 * dt; b.x += Math.sin(TV.t * 2 + b.y * .1) * 6 * dt; });
+  TV.bub = TV.bub.filter(b => b.y > 8);
+  tg.setTransform(1, 0, 0, 1, 0, 0); tg.globalAlpha = 1; tg.drawImage(tvBg, 0, 0);
+  TV.bub.forEach(b => tg.drawImage(BUB[b.r], Math.round(b.x), Math.round(b.y)));
+  drawSpr(tg, SPR.A44[(TV.fr | 0) % 12], Math.round(TV.x), Math.round(54 + Math.sin(TV.t * 1.3) * 7), -TV.sx, 1, 1);
+  tg.setTransform(1, 0, 0, 1, 0, 0); tg.globalAlpha = 1;
+}
+
+/* ============================================================
+   MAIN LOOP
+   ============================================================ */
+const icon = $('#icon').getContext('2d');
+let tvVisible = false;
+new IntersectionObserver(es => es.forEach(e => tvVisible = e.isIntersecting)).observe(tvc);
+
+let last = performance.now(), T = 0;
+function loop(now) {
+  const dt = Math.min(.05, (now - last) / 1000); last = now;
+  requestAnimationFrame(loop);
+  if (document.hidden) return;
+  T += dt;
+
+  // far (blurry)
+  fg.setTransform(1, 0, 0, 1, 0, 0); fg.globalAlpha = 1; fg.clearRect(0, 0, far.width, far.height);
+  for (const f of farFish) { updFish(f, dt); drawSpr(fg, f.spr[(f.fr | 0) % 12], f.x / 5, f.y / 5, -f.sx, f.k, f.alpha); }
+
+  // mid (flipnote pixels)
+  mg.setTransform(1, 0, 0, 1, 0, 0); mg.globalAlpha = 1; mg.clearRect(0, 0, mid.width, mid.height);
+  drawEQ(T);
+
+  updFish(leader, dt);
+  for (const m of school) {
+    const tx = leader.x + m.ox * leader.facing, ty = leader.y + m.oy;
+    const px = m.x;
+    m.x += (tx - m.x) * Math.min(1, dt * m.lag); m.y += (ty - m.y) * Math.min(1, dt * m.lag);
+    const vx = (m.x - px) / dt; if (Math.abs(vx) > 4) m.facing = Math.sign(vx);
+    m.sx += (m.facing - m.sx) * Math.min(1, dt * 4); m.fr += dt * 14;
+    drawSpr(mg, SPR.T34[(m.fr | 0) % 12], Math.round(m.x / 2), Math.round(m.y / 2), -m.sx, 1, m.alpha);
+  }
+  if (Math.abs(leader.x - W / 2) > W) school.forEach(m => { m.x = leader.x + m.ox * leader.facing; m.y = leader.y + m.oy; });
+
+  for (let i = angels.length - 1; i >= 0; i--) {
+    const f = angels[i]; updFish(f, dt);
+    if (i === 1) drawBubbles(dt);
+    drawSpr(mg, f.spr[(f.fr | 0) % 12], Math.round(f.x / 2), Math.round(f.y / 2), -f.sx, 1, f.alpha);
+    if (Math.random() < dt * .12) addBubble(f.x + f.facing * f.size * .42, f.y - 4, 0);
+  }
+  mg.setTransform(1, 0, 0, 1, 0, 0); mg.globalAlpha = 1;
+
+  // header icon
+  icon.clearRect(0, 0, 30, 30); icon.drawImage(SPR.A30[(T * 12 | 0) % 12], 0, 0);
+
+  if (tvVisible) stepTV(dt);
+}
+function drawBubbles(dt) {
+  if (Math.random() < dt * (W / 90) * SPEED) addBubble(Math.random() * W, H + 10);
+  for (const b of bubbles) {
+    b.y -= b.vy * dt * SPEED; b.ph += dt * 1.6; b.x += Math.sin(b.ph) * 10 * dt;
+    mg.globalAlpha = b.a * Math.min(1, b.y / (H * .25));
+    mg.setTransform(1, 0, 0, 1, 0, 0);
+    const s = BUB[b.r]; mg.drawImage(s, Math.round(b.x / 2 - s.width / 2), Math.round(b.y / 2 - s.height / 2));
+  }
+  for (let i = bubbles.length - 1; i >= 0; i--) if (bubbles[i].y < -20) bubbles.splice(i, 1);
+}
+requestAnimationFrame(loop);
+
+/* ============================================================
+   UI
+   ============================================================ */
+// ticker
+const tick = 'NOW SHOWING ✦ ANGEL FISH ✦ COVERED BY TOKINO SHIMA ✦ ORIGINAL BY PATRICHEFF ✦ エンゼルフィッシュ ✦ ';
+const track = $('#track');
+for (let i = 0; i < 4; i++) { const s = document.createElement('span'); s.textContent = tick; track.append(s); }
+
+// scroll: depth / progress / abyss
+const depthEl = $('#depth'), progEl = $('#progress'), root = document.documentElement;
+let ticking = false;
+function onScroll() {
+  const max = Math.max(1, root.scrollHeight - innerHeight), p = Math.min(1, Math.max(0, scrollY / max));
+  depthEl.textContent = 'DEPTH ' + String(Math.round(p * 40)).padStart(2, '0') + 'M';
+  progEl.style.width = (p * 100) + '%';
+  root.style.setProperty('--abyss', (p * .55).toFixed(3));
+  ticking = false;
+}
+addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+onScroll();
+
+// reveal
+const rio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('.reveal').forEach((el, i) => { el.style.transitionDelay = (el.closest('.hero') ? i * .08 : 0) + 's'; rio.observe(el); });
+
+// menu
+const menu = $('#menu');
+$('#menuOpen').addEventListener('click', () => menu.classList.add('open'));
+$('#menuClose').addEventListener('click', () => menu.classList.remove('open'));
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
+
+// profile / credits / share
+if (CONFIG.avatar) { const img = $('#avatarImg'); img.src = CONFIG.avatar; img.hidden = false; $('#avatarKanji').hidden = true; }
+const credEl = $('#cred');
+CONFIG.credits.forEach(c => {
+  const d = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
+  dt.textContent = c.role; dd.textContent = c.name; d.append(dt, dd); credEl.append(d);
+});
+$('#shareBtn').href = 'https://twitter.com/intent/tweet?text=' +
+  encodeURIComponent(CONFIG.liver + 'さんの歌ってみた「エンゼルフィッシュ」🐠') + '&url=' + encodeURIComponent(CONFIG.mv);
+</script>
+</body>
+</html>
